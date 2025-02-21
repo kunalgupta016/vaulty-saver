@@ -34,6 +34,7 @@
   body {
     @apply bg-background text-foreground antialiased;
     font-feature-settings: "rlig" 1, "calt" 1;
+    overflow-x: hidden;
   }
 
   .glass {
@@ -45,29 +46,29 @@
   }
 }
 
-/* Floating Animation */
-@keyframes float {
-  0% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-  100% {
-    transform: translateY(0px);
-  }
+/* Parallax Effects */
+.parallax-wrapper {
+  height: 100vh;
+  overflow-x: hidden;
+  perspective: 10px;
+  transform-style: preserve-3d;
 }
 
-.float {
-  animation: float 4s ease-in-out infinite;
+.parallax-content {
+  position: relative;
+  transform-style: preserve-3d;
 }
 
-.float-slow {
-  animation: float 6s ease-in-out infinite;
+.parallax-bg {
+  transform: translateZ(-10px) scale(2);
 }
 
-.float-fast {
-  animation: float 3s ease-in-out infinite;
+.parallax-mid {
+  transform: translateZ(-5px) scale(1.5);
+}
+
+.parallax-front {
+  transform: translateZ(0);
 }
 
 /* Glow Effect */
