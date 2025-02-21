@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -125,13 +124,13 @@ const Dashboard = () => {
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center space-x-2">
-              <VaultIcon className="h-8 w-8 text-blue-400" />
-              <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400">
+              <VaultIcon className="h-8 w-8 text-blue-400 float" />
+              <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400 gradient-shimmer">
                 Saving Vaults
               </span>
             </div>
             <div className="flex items-center space-x-4">
-              <div className="hidden md:flex items-center px-4 py-2 rounded-lg bg-black/20 border border-white/10">
+              <div className="hidden md:flex items-center px-4 py-2 rounded-lg bg-black/20 border border-white/10 glow">
                 <WalletIcon className="h-4 w-4 text-blue-400 mr-2" />
                 <span className="text-sm text-gray-300">
                   {address.slice(0, 6)}...{address.slice(-4)}
@@ -139,7 +138,7 @@ const Dashboard = () => {
               </div>
               <Button
                 variant="ghost"
-                className="hover:bg-white/5"
+                className="hover:bg-white/5 scale-hover"
                 onClick={handleLogout}
               >
                 <LogOutIcon className="h-5 w-5 mr-2" />
@@ -151,8 +150,8 @@ const Dashboard = () => {
       </nav>
 
       <div className="container mx-auto p-4 space-y-6 animate-fade-in">
-        <div className="flex flex-col items-center justify-center space-y-4 py-8">
-          <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400">
+        <div className="flex flex-col items-center justify-center space-y-4 py-8 float-slow">
+          <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400 gradient-shimmer">
             Your Savings Dashboard
           </h1>
           <p className="text-gray-400">
@@ -161,7 +160,7 @@ const Dashboard = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <Card className="col-span-full lg:col-span-1 card-glass hover:shadow-lg transition-all duration-300">
+          <Card className="col-span-full lg:col-span-1 card-glass hover:shadow-lg transition-all duration-300 scale-hover glow float">
             <CardHeader>
               <CardTitle className="flex items-center">
                 <WalletIcon className="mr-2 h-5 w-5 text-blue-400" />
@@ -174,7 +173,7 @@ const Dashboard = () => {
             </CardContent>
           </Card>
 
-          <Card className="col-span-full lg:col-span-2 card-glass hover:shadow-lg transition-all duration-300">
+          <Card className="col-span-full lg:col-span-2 card-glass hover:shadow-lg transition-all duration-300 scale-hover glow float-slow">
             <CardHeader>
               <CardTitle className="text-blue-400">Actions</CardTitle>
               <CardDescription className="text-gray-400">Deposit or withdraw from your vault</CardDescription>
@@ -209,7 +208,7 @@ const Dashboard = () => {
             </CardContent>
           </Card>
 
-          <Card className="col-span-full card-glass hover:shadow-lg transition-all duration-300">
+          <Card className="col-span-full card-glass hover:shadow-lg transition-all duration-300 scale-hover glow float">
             <CardHeader>
               <CardTitle className="text-blue-400">Recent Transactions</CardTitle>
               <CardDescription className="text-gray-400">Your latest vault activities</CardDescription>

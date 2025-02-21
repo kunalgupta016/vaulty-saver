@@ -44,9 +44,9 @@ const Index = () => {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-gradient-to-b from-slate-900 to-slate-800">
-      <div className="max-w-4xl w-full space-y-8 text-center animate-fade-in">
-        <div className="space-y-4">
-          <h1 className="text-5xl md:text-7xl font-bold tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400">
+      <div className="max-w-4xl w-full space-y-8 text-center">
+        <div className="space-y-4 float-slow">
+          <h1 className="text-5xl md:text-7xl font-bold tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400 gradient-shimmer">
             Welcome to Saving Vaults
           </h1>
           <p className="text-xl md:text-2xl text-gray-400">
@@ -54,7 +54,7 @@ const Index = () => {
           </p>
         </div>
         
-        <div className="card-glass p-8 rounded-2xl max-w-md mx-auto space-y-6 hover:shadow-xl transition-all duration-300">
+        <div className="card-glass p-8 rounded-2xl max-w-md mx-auto space-y-6 hover:shadow-xl transition-all duration-300 scale-hover glow">
           <div className="space-y-4">
             <h2 className="text-2xl font-semibold text-blue-400">Get Started</h2>
             <p className="text-gray-400">
@@ -65,7 +65,7 @@ const Index = () => {
           <Button
             onClick={handleConnect}
             size="lg"
-            className="w-full bg-blue-500 hover:bg-blue-600 transition-all hover:scale-105"
+            className="w-full bg-blue-500 hover:bg-blue-600 transition-all hover:scale-105 pulse"
           >
             <WalletIcon className="mr-2 h-5 w-5" />
             Connect Wallet
@@ -76,7 +76,9 @@ const Index = () => {
           {features.map((feature, index) => (
             <div
               key={index}
-              className="card-glass p-6 rounded-xl space-y-3 hover:shadow-xl transition-all duration-300"
+              className={`card-glass p-6 rounded-xl space-y-3 hover:shadow-xl transition-all duration-300 scale-hover glow float ${
+                index === 0 ? 'float-fast' : index === 1 ? 'float' : 'float-slow'
+              }`}
             >
               <div className="text-blue-400 text-xl font-semibold">
                 {feature.title}
