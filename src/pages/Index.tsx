@@ -68,7 +68,7 @@ const Index = () => {
         >
           <div className="flex items-center justify-center space-x-6">
             <VaultIcon className="h-24 w-24 text-blue-400" />
-            <h1 className="text-6xl md:text-8xl font-bold tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400 gradient-shimmer">
+            <h1 className="text-6xl md:text-8xl font-bold tracking-tighter text-white">
               Saving Vault
             </h1>
           </div>
