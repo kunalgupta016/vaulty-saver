@@ -1,123 +1,212 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowUpIcon, ArrowDownIcon, WalletIcon } from 'lucide-react';
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
+import { ethers } from 'ethers';
+import { useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
   const [balance, setBalance] = useState("0.00");
   const [amount, setAmount] = useState("");
+  const [address, setAddress] = useState("");
   const { toast } = useToast();
+  const navigate = useNavigate();
 
-  const handleDeposit = () => {
-    toast({
-      title: "Deposit Successful",
-      description: `${amount} ETH has been deposited to your vault`,
-    });
-    setAmount("");
+  useEffect(() => {
+    checkWalletConnection();
+  }, []);
+
+  const checkWalletConnection = async () => {
+    if (!window.ethereum) {
+      toast({
+        title: "Wallet Not Found",
+        description: "Please install MetaMask to use this application",
+        variant: "destructive",
+      });
+      navigate('/');
+      return;
+    }
+
+    try {
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const accounts = await provider.listAccounts();
+      
+      if (accounts.length === 0) {
+        navigate('/');
+        return;
+      }
+
+      setAddress(accounts[0].address);
+      const balance = await provider.getBalance(accounts[0].address);
+      setBalance(ethers.formatEther(balance));
+    } catch (error) {
+      console.error("Error checking wallet connection:", error);
+      navigate('/');
+    }
   };
 
-  const handleWithdraw = () => {
-    toast({
-      title: "Withdrawal Successful",
-      description: `${amount} ETH has been withdrawn from your vault`,
-    });
-    setAmount("");
+  const handleDeposit = async () => {
+    if (!window.ethereum) return;
+    
+    try {
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const signer = await provider.getSigner();
+      const tx = {
+        to: address,
+        value: ethers.parseEther(amount)
+      };
+      
+      const transaction = await signer.sendTransaction(tx);
+      await transaction.wait();
+
+      toast({
+        title: "Deposit Successful",
+        description: `${amount} ETH has been deposited to your vault`,
+      });
+      
+      setAmount("");
+      checkWalletConnection(); // Refresh balance
+    } catch (error) {
+      console.error("Error during deposit:", error);
+      toast({
+        title: "Deposit Failed",
+        description: "There was an error processing your deposit",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleWithdraw = async () => {
+    if (!window.ethereum) return;
+    
+    try {
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const signer = await provider.getSigner();
+      const tx = {
+        to: address,
+        value: ethers.parseEther(amount)
+      };
+      
+      const transaction = await signer.sendTransaction(tx);
+      await transaction.wait();
+
+      toast({
+        title: "Withdrawal Successful",
+        description: `${amount} ETH has been withdrawn from your vault`,
+      });
+      
+      setAmount("");
+      checkWalletConnection(); // Refresh balance
+    } catch (error) {
+      console.error("Error during withdrawal:", error);
+      toast({
+        title: "Withdrawal Failed",
+        description: "There was an error processing your withdrawal",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
-    <div className="container mx-auto p-4 space-y-6 animate-fade-in">
-      <div className="flex flex-col items-center justify-center space-y-4">
-        <h1 className="text-3xl font-bold">Your Savings Dashboard</h1>
-        <p className="text-muted-foreground">Manage your secure savings vault</p>
-      </div>
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
+      <div className="container mx-auto p-4 space-y-6 animate-fade-in">
+        <div className="flex flex-col items-center justify-center space-y-4 py-8">
+          <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">
+            Your Savings Dashboard
+          </h1>
+          <p className="text-muted-foreground">
+            Connected Wallet: {address.slice(0, 6)}...{address.slice(-4)}
+          </p>
+        </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <Card className="col-span-full lg:col-span-1 card-glass">
-          <CardHeader>
-            <CardTitle className="flex items-center">
-              <WalletIcon className="mr-2 h-5 w-5" />
-              Current Balance
-            </CardTitle>
-            <CardDescription>Your total savings in ETH</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold">{balance} ETH</div>
-          </CardContent>
-        </Card>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <Card className="col-span-full lg:col-span-1 card-glass hover:shadow-lg transition-all duration-300">
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                <WalletIcon className="mr-2 h-5 w-5 text-blue-500" />
+                Current Balance
+              </CardTitle>
+              <CardDescription>Your total savings in ETH</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="text-4xl font-bold text-blue-600">{balance} ETH</div>
+            </CardContent>
+          </Card>
 
-        <Card className="col-span-full lg:col-span-2 card-glass">
-          <CardHeader>
-            <CardTitle>Actions</CardTitle>
-            <CardDescription>Deposit or withdraw from your vault</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex flex-col md:flex-row gap-4">
-              <Input
-                type="number"
-                placeholder="Amount in ETH"
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
-                className="flex-1"
-              />
-              <div className="flex gap-2">
-                <Button
-                  onClick={handleDeposit}
-                  className="flex-1 md:flex-none"
-                >
-                  <ArrowUpIcon className="mr-2 h-4 w-4" />
-                  Deposit
-                </Button>
-                <Button
-                  onClick={handleWithdraw}
-                  variant="secondary"
-                  className="flex-1 md:flex-none"
-                >
-                  <ArrowDownIcon className="mr-2 h-4 w-4" />
-                  Withdraw
-                </Button>
+          <Card className="col-span-full lg:col-span-2 card-glass hover:shadow-lg transition-all duration-300">
+            <CardHeader>
+              <CardTitle className="text-blue-600">Actions</CardTitle>
+              <CardDescription>Deposit or withdraw from your vault</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex flex-col md:flex-row gap-4">
+                <Input
+                  type="number"
+                  placeholder="Amount in ETH"
+                  value={amount}
+                  onChange={(e) => setAmount(e.target.value)}
+                  className="flex-1 focus:ring-2 focus:ring-blue-500"
+                />
+                <div className="flex gap-2">
+                  <Button
+                    onClick={handleDeposit}
+                    className="flex-1 md:flex-none bg-blue-600 hover:bg-blue-700"
+                  >
+                    <ArrowUpIcon className="mr-2 h-4 w-4" />
+                    Deposit
+                  </Button>
+                  <Button
+                    onClick={handleWithdraw}
+                    variant="secondary"
+                    className="flex-1 md:flex-none hover:bg-blue-100"
+                  >
+                    <ArrowDownIcon className="mr-2 h-4 w-4" />
+                    Withdraw
+                  </Button>
+                </div>
               </div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
 
-        <Card className="col-span-full card-glass">
-          <CardHeader>
-            <CardTitle>Recent Transactions</CardTitle>
-            <CardDescription>Your latest vault activities</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              {transactions.map((tx, index) => (
-                <div
-                  key={index}
-                  className="flex items-center justify-between p-3 rounded-lg bg-white/50"
-                >
-                  <div className="flex items-center gap-3">
-                    {tx.type === 'deposit' ? (
-                      <ArrowUpIcon className="text-green-500" />
-                    ) : (
-                      <ArrowDownIcon className="text-red-500" />
-                    )}
-                    <div>
-                      <div className="font-medium">
-                        {tx.type === 'deposit' ? 'Deposit' : 'Withdrawal'}
-                      </div>
-                      <div className="text-sm text-muted-foreground">
-                        {tx.date}
+          <Card className="col-span-full card-glass hover:shadow-lg transition-all duration-300">
+            <CardHeader>
+              <CardTitle className="text-blue-600">Recent Transactions</CardTitle>
+              <CardDescription>Your latest vault activities</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {transactions.map((tx, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center justify-between p-4 rounded-lg bg-white shadow-sm hover:shadow-md transition-shadow duration-200"
+                  >
+                    <div className="flex items-center gap-3">
+                      {tx.type === 'deposit' ? (
+                        <ArrowUpIcon className="text-green-500" />
+                      ) : (
+                        <ArrowDownIcon className="text-red-500" />
+                      )}
+                      <div>
+                        <div className="font-medium">
+                          {tx.type === 'deposit' ? 'Deposit' : 'Withdrawal'}
+                        </div>
+                        <div className="text-sm text-muted-foreground">
+                          {tx.date}
+                        </div>
                       </div>
                     </div>
+                    <div className="font-medium">
+                      {tx.type === 'deposit' ? '+' : '-'}{tx.amount} ETH
+                    </div>
                   </div>
-                  <div className="font-medium">
-                    {tx.type === 'deposit' ? '+' : '-'}{tx.amount} ETH
-                  </div>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </div>
   );
