@@ -111,13 +111,13 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
+    <div className="min-h-screen bg-gradient-to-b from-slate-900 to-slate-800">
       <div className="container mx-auto p-4 space-y-6 animate-fade-in">
         <div className="flex flex-col items-center justify-center space-y-4 py-8">
-          <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">
+          <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400">
             Your Savings Dashboard
           </h1>
-          <p className="text-muted-foreground">
+          <p className="text-gray-400">
             Connected Wallet: {address.slice(0, 6)}...{address.slice(-4)}
           </p>
         </div>
@@ -126,20 +126,20 @@ const Dashboard = () => {
           <Card className="col-span-full lg:col-span-1 card-glass hover:shadow-lg transition-all duration-300">
             <CardHeader>
               <CardTitle className="flex items-center">
-                <WalletIcon className="mr-2 h-5 w-5 text-blue-500" />
+                <WalletIcon className="mr-2 h-5 w-5 text-blue-400" />
                 Current Balance
               </CardTitle>
-              <CardDescription>Your total savings in ETH</CardDescription>
+              <CardDescription className="text-gray-400">Your total savings in ETH</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="text-4xl font-bold text-blue-600">{balance} ETH</div>
+              <div className="text-4xl font-bold text-blue-400">{balance} ETH</div>
             </CardContent>
           </Card>
 
           <Card className="col-span-full lg:col-span-2 card-glass hover:shadow-lg transition-all duration-300">
             <CardHeader>
-              <CardTitle className="text-blue-600">Actions</CardTitle>
-              <CardDescription>Deposit or withdraw from your vault</CardDescription>
+              <CardTitle className="text-blue-400">Actions</CardTitle>
+              <CardDescription className="text-gray-400">Deposit or withdraw from your vault</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex flex-col md:flex-row gap-4">
@@ -148,12 +148,12 @@ const Dashboard = () => {
                   placeholder="Amount in ETH"
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
-                  className="flex-1 focus:ring-2 focus:ring-blue-500"
+                  className="flex-1 bg-black/20 border-white/10 text-white"
                 />
                 <div className="flex gap-2">
                   <Button
                     onClick={handleDeposit}
-                    className="flex-1 md:flex-none bg-blue-600 hover:bg-blue-700"
+                    className="flex-1 md:flex-none bg-blue-500 hover:bg-blue-600"
                   >
                     <ArrowUpIcon className="mr-2 h-4 w-4" />
                     Deposit
@@ -161,7 +161,7 @@ const Dashboard = () => {
                   <Button
                     onClick={handleWithdraw}
                     variant="secondary"
-                    className="flex-1 md:flex-none hover:bg-blue-100"
+                    className="flex-1 md:flex-none bg-slate-800 hover:bg-slate-700 text-white"
                   >
                     <ArrowDownIcon className="mr-2 h-4 w-4" />
                     Withdraw
@@ -173,32 +173,32 @@ const Dashboard = () => {
 
           <Card className="col-span-full card-glass hover:shadow-lg transition-all duration-300">
             <CardHeader>
-              <CardTitle className="text-blue-600">Recent Transactions</CardTitle>
-              <CardDescription>Your latest vault activities</CardDescription>
+              <CardTitle className="text-blue-400">Recent Transactions</CardTitle>
+              <CardDescription className="text-gray-400">Your latest vault activities</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
                 {transactions.map((tx, index) => (
                   <div
                     key={index}
-                    className="flex items-center justify-between p-4 rounded-lg bg-white shadow-sm hover:shadow-md transition-shadow duration-200"
+                    className="flex items-center justify-between p-4 rounded-lg bg-black/20 hover:bg-black/30 transition-all duration-200"
                   >
                     <div className="flex items-center gap-3">
                       {tx.type === 'deposit' ? (
-                        <ArrowUpIcon className="text-green-500" />
+                        <ArrowUpIcon className="text-green-400" />
                       ) : (
-                        <ArrowDownIcon className="text-red-500" />
+                        <ArrowDownIcon className="text-red-400" />
                       )}
                       <div>
-                        <div className="font-medium">
+                        <div className="font-medium text-white">
                           {tx.type === 'deposit' ? 'Deposit' : 'Withdrawal'}
                         </div>
-                        <div className="text-sm text-muted-foreground">
+                        <div className="text-sm text-gray-400">
                           {tx.date}
                         </div>
                       </div>
                     </div>
-                    <div className="font-medium">
+                    <div className="font-medium text-white">
                       {tx.type === 'deposit' ? '+' : '-'}{tx.amount} ETH
                     </div>
                   </div>
