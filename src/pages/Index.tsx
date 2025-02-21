@@ -2,7 +2,7 @@
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { useNavigate } from 'react-router-dom';
-import { WalletIcon } from 'lucide-react';
+import { WalletIcon, VaultIcon } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
 import { ethers } from 'ethers';
 
@@ -45,10 +45,13 @@ const Index = () => {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-gradient-to-b from-slate-900 to-slate-800">
       <div className="max-w-4xl w-full space-y-8 text-center">
-        <div className="space-y-4 float-slow">
-          <h1 className="text-5xl md:text-7xl font-bold tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400 gradient-shimmer">
-            Welcome to Saving Vaults
-          </h1>
+        <div className="space-y-6 float-slow">
+          <div className="flex items-center justify-center space-x-4">
+            <VaultIcon className="h-16 w-16 text-blue-400 float" />
+            <h1 className="text-5xl md:text-7xl font-bold tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400 gradient-shimmer">
+              Saving Vault
+            </h1>
+          </div>
           <p className="text-xl md:text-2xl text-gray-400">
             Your secure digital vault for savings on the blockchain
           </p>
