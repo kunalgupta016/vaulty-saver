@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowUpIcon, ArrowDownIcon, WalletIcon } from 'lucide-react';
+import { ArrowUpIcon, ArrowDownIcon, WalletIcon, LogOutIcon, VaultIcon } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
 import { ethers } from 'ethers';
 import { useNavigate } from 'react-router-dom';
@@ -46,6 +46,14 @@ const Dashboard = () => {
       console.error("Error checking wallet connection:", error);
       navigate('/');
     }
+  };
+
+  const handleLogout = () => {
+    toast({
+      title: "Logged Out",
+      description: "Successfully disconnected your wallet",
+    });
+    navigate('/');
   };
 
   const handleDeposit = async () => {
@@ -112,13 +120,43 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-900 to-slate-800">
+      {/* Navigation Bar */}
+      <nav className="glass border-b border-white/10 backdrop-blur-lg">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center justify-between h-16">
+            <div className="flex items-center space-x-2">
+              <VaultIcon className="h-8 w-8 text-blue-400" />
+              <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400">
+                Saving Vaults
+              </span>
+            </div>
+            <div className="flex items-center space-x-4">
+              <div className="hidden md:flex items-center px-4 py-2 rounded-lg bg-black/20 border border-white/10">
+                <WalletIcon className="h-4 w-4 text-blue-400 mr-2" />
+                <span className="text-sm text-gray-300">
+                  {address.slice(0, 6)}...{address.slice(-4)}
+                </span>
+              </div>
+              <Button
+                variant="ghost"
+                className="hover:bg-white/5"
+                onClick={handleLogout}
+              >
+                <LogOutIcon className="h-5 w-5 mr-2" />
+                Disconnect
+              </Button>
+            </div>
+          </div>
+        </div>
+      </nav>
+
       <div className="container mx-auto p-4 space-y-6 animate-fade-in">
         <div className="flex flex-col items-center justify-center space-y-4 py-8">
           <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400">
             Your Savings Dashboard
           </h1>
           <p className="text-gray-400">
-            Connected Wallet: {address.slice(0, 6)}...{address.slice(-4)}
+            Manage your secure blockchain savings
           </p>
         </div>
 
